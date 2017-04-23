@@ -45,8 +45,8 @@ class SignInController extends \Illuminate\Routing\Controller {
 			$email = $request->input('email');
 			if (BaseUser::authenticate($email, $request->input('password')))
 			{
-				if(!BaseUser::checkEmail($email))
-					return view('pages.signin',['email' => $email,'confirmmessage'=>'A verification code has been sent to '.$email.'. Check your email to confirm.']);
+				//if(!BaseUser::checkEmail($email))
+					//return view('pages.signin',['email' => $email,'confirmmessage'=>'A verification code has been sent to '.$email.'. Check your email to confirm.']);
 				BaseUser::signIn($email);
 				if (Input::has('after_signin_redirect')) {
 					return redirect()->intended($request->input('after_signin_redirect'));

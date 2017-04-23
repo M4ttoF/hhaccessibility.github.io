@@ -8,6 +8,7 @@
   <script src="/js/profile_save_prompt.js"></script>
   <script src="/js/utils.js"></script>
   <script src="/js/question_explanation.js"></script>
+  <script src="/js/datalist.polyfill.js"></script>
 @stop
 @section('content')
 <div class="profile row">
