@@ -1,10 +1,10 @@
 @extends('layouts.default', ['body_class' => 'nav-home-page'])
 @section('footer-content')
+	<script src="/js/service_worker_script.js" type="text/javascript"></script>
 	<script src="/js/jquery-3.1.1.js"  type="text/javascript"></script>
 	<script src="/js/utils.js" type="text/javascript"></script>
 	<script src="/js/home.js" type="text/javascript"></script>
 	<script src="/js/hover_text.js" type="text/javascript"></script>
-	<script src="/js/service_worker_script.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		var default_location = {
 			'latitude': {{ $default_location['latitude'] }},
@@ -13,23 +13,6 @@
 	</script>
 	<script type="text/javascript" async defer
 		src="//maps.googleapis.com/maps/api/js?key={{ $google_map_api_key }}&amp;callback=initMap">
-	</script>
-	
-	<!-- Firebase App is always required and must be first -->
-	<script src="https://www.gstatic.com/firebasejs/5.3.0/firebase-app.js"></script>
-	<script src="https://www.gstatic.com/firebasejs/5.3.0/firebase-messaging.js"></script>
-
-	<script>
-	  // Initialize Firebase
-	  var config = {
-	    apiKey: "AIzaSyBX6l4geba-CjXE_WlQwOX6pxCIrVl-tjk",
-	    authDomain: "wise-bongo-209220.firebaseapp.com",
-	    databaseURL: "https://wise-bongo-209220.firebaseio.com",
-	    projectId: "wise-bongo-209220",
-	    storageBucket: "wise-bongo-209220.appspot.com",
-	    messagingSenderId: "926874022337"
-	  };
-	  firebase.initializeApp(config);
 	</script>
 @stop
 @section('content')
