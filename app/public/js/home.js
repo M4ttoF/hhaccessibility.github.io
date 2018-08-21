@@ -37,7 +37,7 @@ function delayedProcessAddress()
 		clearInterval(timer);
 		timer = undefined;
 	}
-	
+
 	timer = setTimeout(conditionalProcessAddress, 1000);
 }
 
@@ -60,10 +60,11 @@ function initMap()
 	google.maps.event.addDomListener(window, "resize", function() {
 		var center = map.getCenter();
 		google.maps.event.trigger(map, "resize");
-		map.setCenter(center); 
+		map.setCenter(center);
 	});
 	google.maps.event.addListener(map, 'mousedown', function(event) {
 		locationInfo(map, event.latLng);
+		blinkMap($('#map')[0])
   	});
 	conditionalProcessAddress();
 	$('#address').bind('keyup change', delayedProcessAddress);
@@ -120,7 +121,7 @@ function processAddress()
 			var new_location = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
 			setMarker(new_location);
 			saveUserLocation(address, latitude, longitude);
-		} else 
+		} else
 		{
 			console.error('Geocode was not successful for the following reason: ' + status);
 		}
@@ -146,7 +147,7 @@ function getLocationCategoryIdFromURL(url)
 	if ( index !== -1 )
 	{
 		var choppedUrl = url.substring(index + 'location_tag_id='.length);
-		
+
 		// Remove parameters after the location category/tag id
 		index = choppedUrl.indexOf('&');
 		if ( index !== -1 )
@@ -169,7 +170,7 @@ function getKeywordsInputElement()
 
 function updateCategoryLinksOffKeywords()
 {
-	// We want the category links on the home page 
+	// We want the category links on the home page
 	// to filter also by keyword.
 	// To accomplish this, we're adding the keywords as an encoded parameter
 	// in the location search URL's of each location category.
@@ -180,7 +181,7 @@ function updateCategoryLinksOffKeywords()
 		var $this = $(this);
 		var oldUrl = $this.attr('href');
 		var location_category_id = getLocationCategoryIdFromURL(oldUrl);
-		var newUrl = '/location-search?location_tag_id=' + location_category_id;
+		var newUrl = '/location/search?location_tag_id=' + location_category_id;
 		if ( keywords )
 		{
 			newUrl = newUrl + '&keywords=' + keywords;
@@ -200,27 +201,24 @@ Sets current search location to be whatever GPS coordinates are used.
 */
 function setToGeoLocation()
 {
-	if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-			latlon = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-			// if on desktop and not within 10km of Windsor, just use city hall.
-			if (isDesktop()) {
-				var distance = calculateDistance(latlon, default_location);
-				if (distance > 10000) {
-					latlon = default_location;
-				}
+	getCurrentGeolocation().then(function(latlon) {
+		// if on desktop and not within 10km of Windsor, just use city hall.
+		if (isDesktop()) {
+			var distance = calculateDistance(latlon, default_location);
+			if (distance > 10000) {
+				latlon = default_location;
 			}
-			
-			locationInfo(map, latlon);
-		}, function(error) {
-			if (window.location.protocol === 'http:') {
-				showMessage('<p>We need to redirect to get your physical location.</p>' +
-				'<p>We do not have a signed SSL certificate yet but are working on it.  If you\'re asked if you want to accept the risk of navigating to HTTPS, please accept so we can finish getting your location.</p>').then(function() {
-					redirectToHTTPSForSettingGeoLocation();
-				});
-			}
-		});
-    }
+		}
+
+		locationInfo(map, latlon);
+	}, function() {
+		if (window.location.protocol === 'http:') {
+			showMessage('<p>We need to redirect to get your physical location.</p>' +
+			'<p>We do not have a signed SSL certificate yet but are working on it.  If you\'re asked if you want to accept the risk of navigating to HTTPS, please accept so we can finish getting your location.</p>').then(function() {
+				redirectToHTTPSForSettingGeoLocation();
+			});
+		}
+	});
 	return false;
 }
 
@@ -231,3 +229,9 @@ function bindCategoryLinksToKeywordInput()
 }
 
 $(document).ready(bindCategoryLinksToKeywordInput);
+
+
+function blinkMap(map1)
+{
+	$(map1).fadeOut(200, function(){ $(map1).fadeIn(200); });
+}

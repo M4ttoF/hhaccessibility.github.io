@@ -28,7 +28,7 @@
 				))
 		</div>
 		<div class="ratings">
-			<h1><a href="/location-report/{{ $location->id }}">{{ $location->name }}</a></h1>
+			<h1><a href="/location-report/{{ $location->id }}" class="{{ $responsive_text_helper->getClassesFor($location->name) }}">{{ $location->name }}</a></h1>
 			@include('includes.rate_report_toggle',
 				array(
 					'location_id' => $location->id,
@@ -40,7 +40,8 @@
 			@include('pages.location_report.questions',
 				array(
 					'question_category' => $question_category,
-					'location_id' => $location->id
+					'location_id' => $location->id,
+					'user_counts' => $user_counts
 				))
 		</div>
 	@endif

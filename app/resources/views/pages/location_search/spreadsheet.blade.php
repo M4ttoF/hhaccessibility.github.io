@@ -15,7 +15,17 @@
 			<button type="button" id="updateRadius" class="btn btn-primary">Update</button>
 	</div>
 	@if (count($locations) === 0)
-		No location found matching the specified keywords
+		<div class="no-locations-found">
+			<h3>No location found matching the specified keywords</h3>
+			@if ($base_user->isSignedIn())
+				<a class="btn btn-default" href="/location/management/add">Add New Location</a>
+			@else
+				<h4>Add a new location by</h4>
+				<a class="btn btn-default" href="/signin?after_signin_redirect=%2Flocation%2Fmanagement%2Fadd">Signing In</a>
+				<h4>or</h4>
+				<a class="btn btn-default" href="/signup?after_signup_redirect=%2Flocation%2Fmanagement%2Fadd">Signing Up</a>
+			@endif
+		</div>			
 	@else
 		<div class="row column-titles">
 			<div class="col-xs-6 name">
@@ -31,7 +41,7 @@
 		<div class="data">
 		@foreach ( $locations as $key => $value )
 			<div class="location">
-				<a href="/location-report/{{ $value->id }}">
+				<a href="/location/report/{{ $value->id }}">
 					<div class="row">
 						<div class="col-xs-6">
 							{{ $value->name }}

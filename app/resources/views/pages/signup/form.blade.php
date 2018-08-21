@@ -12,6 +12,7 @@
 				<form method="post" action="/signup">
 					{!! csrf_field() !!}
 					@include('pages.validation_messages', array('errors'=>$errors))
+					<input type="hidden" name="after_signup_redirect" value="{{ isset($after_signup_redirect) ? $after_signup_redirect : '' }}">
 					<div class="row">
 						<div class="col-xs-12">
 							<input class="clean" name="email" placeholder="Email" value="{{ old('email') }}">
@@ -42,11 +43,11 @@
 			<div class="social-media-signins">
 				Or sign in using your social media account
 				
-				<a class="facebook" href="/socialauth/auth/Facebook">
+				<a rel="nofollow" class="facebook" href="/socialauth/auth/Facebook">
 					<i class="fa-lg fa fa-facebook"></i>
 					<div class="pull-right">Sign in with facebook</div>
 				</a>
-				<a class="google-plus" href="/socialauth/auth/Google">
+				<a rel="nofollow" class="google-plus" href="/socialauth/auth/Google">
 					<i class="fa-lg fa fa-google-plus"></i>
 					<div class="pull-right">Sign in with Google</div>
 				</a>

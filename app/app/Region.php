@@ -1,15 +1,16 @@
 <?php
 
 namespace App;
-use Eloquent;
+
+use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class Region extends Eloquent
+class Region extends Model
 {
     protected $fillable = [
         'name', 'country_id',
     ];
-	public $timestamps = false;
+    public $timestamps = false;
 
-	protected $table = 'region';
+    protected $table = 'region';
 }

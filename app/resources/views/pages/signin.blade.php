@@ -1,6 +1,7 @@
 @extends('layouts.default', ['body_class' => 'nav-profile'])
 @section('content')
-
+	<script src="/js/jquery-3.1.1.js"></script>
+	<script src="/js/password_caps.js" type="text/javascript"></script>
 <div class="sign-in">
 	<div class="text-center header">
 		<h1>Sign In</h1>
@@ -14,13 +15,13 @@
 					{{$message}}
 				</div>
 				@endif
-				@if ( $confirmmessage )
+				@if ( isset($confirmmessage) && $confirmmessage )
 				<strong>{{ $confirmmessage }}</strong>
 				@else
 				<form method="post" action="/signin">
 					{!! csrf_field() !!}
 					@include('pages.validation_messages', array('errors'=>$errors))
-					<input type="hidden" name="after_signin_redirect" value="{{ $after_signin_redirect }}">
+					<input type="hidden" name="after_signin_redirect" value="{{ isset($after_signin_redirect) ? $after_signin_redirect : '' }}">
 					<div class="row">
 						<div class="col-xs-12">
 							<input type="email"
@@ -29,11 +30,14 @@
 						</div>
 						<div class="col-xs-12">
 							<input class="clean" name="password" type="password" placeholder="Password" value="{{ old('password') }}">
+							<div id="capsLock" class="capsLock text-right alert alert-warning">CapsLock is on!
+								<span class="fa fa-exclamation-circle"></span>
+							</div>
 						</div>
 						
                         <div class="col-xs-12">
 							<div class="remember-password">
-								<a class="pull-right" href="/password-recovery"> Forgot Password? </a>
+								<a class="pull-right" href="/user/password-recovery"> Account Recovery </a>
 							</div>
                         </div>
                                                 
@@ -49,14 +53,14 @@
 			<div class="social-media-signins">
 				Or sign in using your social media account
 				
-				<a class="facebook" href="/socialauth/auth/Facebook{{
-					$after_signin_redirect ? htmlentities('?after_signin_redirect='.urlencode($after_signin_redirect)) : ''
+				<a rel="nofollow" class="facebook" href="/socialauth/auth/Facebook{{
+					isset($after_signin_redirect) && $after_signin_redirect ? htmlentities('?after_signin_redirect='.urlencode($after_signin_redirect)) : ''
 				}}">
 					<i class="fa-lg fa fa-facebook"></i>
 					<div class="pull-right">Sign in with facebook</div>
 				</a>
-				<a class="google-plus" href="/socialauth/auth/Google{{
-					$after_signin_redirect ? htmlentities('?after_signin_redirect='.urlencode($after_signin_redirect)) : ''
+				<a rel="nofollow" class="google-plus" href="/socialauth/auth/Google{{
+					isset($after_signin_redirect) && $after_signin_redirect ? htmlentities('?after_signin_redirect='.urlencode($after_signin_redirect)) : ''
 				}}">
 					<i class="fa-lg fa fa-google-plus"></i>
 					<div class="pull-right">Sign in with Google</div>

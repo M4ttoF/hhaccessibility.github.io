@@ -13,10 +13,8 @@
 <div class="profile row">
 	<div class="col-md-3 col-sm-4 col-xs-12">
 		@if ($has_profile_photo)
-
 			<div class="photo-display">
-
-			    <p class="remove-photo"><a href="/profile-photo-delete">Remove Photo</a></p>
+			    <p class="remove-photo"><a href="/profile-photo/delete">Remove Photo</a></p>
 				<div id="profile-photo-rotate" onclick="rotateImage()"><i class="fa fa-repeat fa-4x"></i></div>
 				<div class="photo-changer" onclick="selectImageFile()">
 					<div class="uploaded-photo">
@@ -34,9 +32,10 @@
             </div>
         </div>
         @endif
+		<p class="text-danger text-center" id="profile_error"></p>
 		<form id="photo-upload" method="post" action="/profile-photo-upload" enctype="multipart/form-data">
 			{!! csrf_field() !!}
-            <input class="hidden-uploader" type="file" name="profile_photo" onchange="upload()">
+            <input class="hidden-uploader" type="file" name="profile_photo" onchange="upload(event)">
 		</form>
  	</div>
     <div class="col-md-9 col-sm-8 col-xs-12">
@@ -85,7 +84,7 @@
 							<label>Password</label>
 						</div>
 						<div class="col-sm-8 col-xs-7">
-							<a class="btn btn-default" href="/change-password">Change password</a>
+							<a class="btn btn-default" href="/user/change-password">Change password</a>
 						</div>
 					</div>
 				</div>
@@ -121,8 +120,8 @@
 							<label for="province">State/Province</label>
 						</div>
 						<div class="col-sm-8 col-xs-7">
-							<input list="regions" class="form-control" id="home_region" name="home_region" value="{{ $user->home_region }}">
-							<datalist id="regions"></datalist>
+							<select class="form-control" id="home_region" name="home_region" data-value="{{ $user->home_region }}">
+							</select>
 						</div>
 					</div>
 				</div>
@@ -225,7 +224,7 @@
 			<div class="box rewards">
 				<div>
 					<a class="btn btn-default" href="/reviewed-locations">My Reviews({{ $num_reviews }})</a>
-					<a class="btn btn-default" href="/locations-added-by-me">My Locations({{ $num_locations_added_by_me }})</a>
+					<a class="btn btn-default" href="/location/management/my-locations">My Locations({{ $num_locations_added_by_me }})</a>
 				</div>
 			</div>
 

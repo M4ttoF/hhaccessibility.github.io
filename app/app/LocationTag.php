@@ -1,16 +1,17 @@
 <?php
 
 namespace App;
-use Eloquent;
 
-class LocationTag extends Eloquent
+use Illuminate\Database\Eloquent\Model;
+
+class LocationTag extends Model
 {
     protected $fillable = [
         'name', 'description',
     ];
-	
-	protected $table = 'location_tag';
-	public $timestamps = false;
+    
+    protected $table = 'location_tag';
+    public $timestamps = false;
 
     public function locations()
     {

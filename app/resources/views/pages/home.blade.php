@@ -31,28 +31,42 @@
 		</div>
 		<div class="col-lg-7">
 			<div class="home-inputs">
-				@if (!$is_authenticated)
-				<div class="signin-signup">
-					<a href="/signin">
-						<table>
-							<tr>
-								<td class="user-icon">
-									<i class="fa fa-user"></i>
-								</td>
-								<td class="text-center sign-in-sign-up">
-									Sign in / Sign up
-								</td>
-							</tr>
-						</table>
-					</a>
-				</div>
+				@if (!$base_user->isSignedIn())
+					<div class="signin-signup">
+						<a href="/signin">
+							<table>
+								<tr>
+									<td class="user-icon">
+										<i class="fa fa-user"></i>
+									</td>
+									<td class="text-center sign-in-sign-up">
+										Sign in 
+									</td>
+								</tr>
+							</table>
+						</a>
+						<a href="/signup">
+							<table>
+								<tr>
+									<td class="text-center sign-in-sign-up">
+										Sign up 
+									</td>
+								</tr>
+							</table>
+						</a>		
+					</div>
+					
+	
+						
+					
+				
 				@endif
 				<div>
 					<div id="map"></div>
 				</div>
 				<div class="search">
 					{{ csrf_field() }}
-					<form role="search" action="/location-search">
+					<form role="search" action="/location/search">
 						<div class="address-row">
 							<datalist id="location_search_options">
 								@foreach ($location_search_options as $option)
@@ -90,7 +104,7 @@
 					@foreach ( $location_tags as $key => $value )
 
 						<div class="location-tag col-sm-4 col-xs-6">
-							<a href="/location-search?location_tag_id={{ $value->id }}" title="{{ $value->description }}">
+							<a href="/location/search?location_tag_id={{ $value->id }}" title="{{ $value->description }}">
 							{{ $value->name }}
 							</a>
 						</div>
