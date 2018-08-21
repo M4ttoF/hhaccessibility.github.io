@@ -22,7 +22,6 @@ class PWAController extends Controller
             "background_color" => "#202767",
             "related_applications" => [],
             "prefer_related_applications" => false,
-            "gcm_sender_id": "103953800507",
             "icons" => [
                 [
                     "src" => "/images/logo-192x192.png",

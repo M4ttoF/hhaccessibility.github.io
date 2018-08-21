@@ -11,9 +11,6 @@
 			'longitude': {{ $default_location['longitude'] }} 
 		};
 	</script>
-	<script type="text/javascript" async defer
-		src="//maps.googleapis.com/maps/api/js?key={{ $google_map_api_key }}&amp;callback=initMap">
-	</script>
 @stop
 @section('content')
 <div class="home-page">

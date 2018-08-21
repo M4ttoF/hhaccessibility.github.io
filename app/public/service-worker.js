@@ -3,27 +3,34 @@ title = 'We Need Your Help!';
 options = {
 	body: '',
 	icon: '/images/logo-192x192.png',
+	sound: '/sounds/alert.wav',
 	actions: [
 			{
 			action: 'review',
 			title: 'Yes!'
 			}
 		],
+	tag: 'help-notification',
 	vibrate: [500,110,500,110,450]
 	};
 function helpNotification(name,id) {
-		options.body='Would you like to add a review to '+name+'?';
-		//self.registration.showNotification(title, options);
+	if(name=='404')
+		options.body='';
+	else{
 		reviewRedirect='location/rating/'+id+'/5';
+		options.body='Would you like to add a review to '+name+'?';
+	}
+	//self.registration.showNotification(title, options);
 };
 
 function sendNotification() {
 	//check to send here
+	sendMessage({type: 'refresh'});
 	if(options.body!=='')
 		self.registration.showNotification(title,options);
 }
 
-function send_message_to_client(client, msg){
+function sendMessageToClient(client, msg){
     return new Promise(function(resolve, reject){
         var msg_chan = new MessageChannel();
 
@@ -39,7 +46,13 @@ function send_message_to_client(client, msg){
     });
 }
 
-setTimeout(setInterval(sendNotification,10000),15000)
+function sendMessage(content){
+	clients.matchAll().then(clients => {
+		clients.forEach(client => {
+			sendMessageToClient(client, content);
+		})
+	})
+}
 
 self.addEventListener('install', function(e) {   
 	e.waitUntil(self.skipWaiting());
@@ -58,18 +71,20 @@ self.addEventListener('fetch',function(e) {
 self.addEventListener('notificationclick', function(e) {
     switch(e.action) {
     	case 'review':
-    		console.log(Response.redirect(reviewRedirect));
-    		clients.matchAll().then(clients => {
-		        clients.forEach(client => {
-		            send_message_to_client(client, reviewRedirect);
-		        })
-		    })
+    		sendMessage({
+    			type: 'redirect',
+    			url: reviewRedirect
+    		});
     		break;
     }
     e.notification.close();
 })
 
 self.addEventListener('message', function(e) {
-	console.log(e.data);
 	helpNotification(e.data.name,e.data.id);
-})	
+})
+
+//send first notification
+setTimeout(sendNotification,5000);
+//Starting the push notification clock
+setTimeout(setInterval(sendNotification,3600000),5000);

@@ -8,6 +8,7 @@ if (pos+1 && url[pos+8] && 'serviceWorker' in navigator) {
 		if (!navigator.serviceWorker.controller){
 			location.reload();
 		}
+		sendNewLocation();
 	})
 	.catch(function(err) {
 		console.log("Service Worker Failed to Register", err);
@@ -16,12 +17,15 @@ if (pos+1 && url[pos+8] && 'serviceWorker' in navigator) {
 
 if ('serviceWorker' in navigator){
 	navigator.serviceWorker.addEventListener('message', function(e) {
-		console.log("Client 1 Recieved Message: " + e.data);
-		location.replace(e.data);
+		if(e.data.type=='redirect') {
+			location.replace(e.data.url);
+		} else if(e.data.type='refresh') {
+			sendNewLocation();
+		}
 	});
 }
 
-function helpNotification() {
+function sendNewLocation() {
 	getCurrentGeolocation().then( function(latlng){
 		lng=latlng.lng();
 		lat=latlng.lat();
@@ -34,10 +38,13 @@ function helpNotification() {
 				navigator.serviceWorker.controller.postMessage(data);
 			},
 			error: function(xhr, reason, ex){
+				var sampleData={
+					name: '404',
+					id:'0'
+				};
+				navigator.serviceWorker.controller.postMessage(sampleData);
 				console.log("No nearby locations found at "+urlGet);
 			}
 		});
 	});
-    
 };
-setTimeout(helpNotification,10000);
